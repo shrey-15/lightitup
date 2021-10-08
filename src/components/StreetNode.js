@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid, Typography, Slider, Switch } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import CircularBar from './CircularBar'
 import Brightness6Icon from '@mui/icons-material/Brightness6'
 import FlashOnIcon from '@mui/icons-material/FlashOn'
-import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
+import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat'
 import Chart from 'react-google-charts'
+import axios from 'axios'
 
 const useStyles = makeStyles({
     root: {
@@ -19,7 +20,7 @@ const StreetNode = () => {
     const handleChange = (event, newValue) => {
         if (newValue !== value) {
             setValue(newValue)
-            console.log(newValue)
+            // console.log(newValue)
         }
     }
     const classes = useStyles();
@@ -49,6 +50,13 @@ const StreetNode = () => {
             label: '100%',
         },
     ];
+    useEffect(()=> {
+        axios.get('toggle/',{id:"streetlight1",status:(!isToggled)})
+    },[isToggled])
+
+    useEffect(()=> {
+        axios.get('dimming/',{id:"streetlight1",value:value})
+    },[value])
 
     return (
         <div className="md:container md:mx-auto mt-8">
@@ -65,7 +73,9 @@ const StreetNode = () => {
                         <Grid item xs className="on-off-btn flex items-center justify-end pr-8">
                             <Typography className="text-lg sm:text-sm text-primary font-bold">On/Off&nbsp; &nbsp; </Typography>
                             <Switch checked={isToggled}
-                                onChange={() => setIsToggled(!isToggled)}
+                                onChange={() => 
+                                    setIsToggled(!isToggled)
+                                }
                                 inputProps={{ 'aria-label': 'controlled' }}
                             />
                         </Grid>
