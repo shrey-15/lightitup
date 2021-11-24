@@ -5,12 +5,14 @@ import { Grid } from '@mui/material'
 import Brightness6Icon from '@mui/icons-material/Brightness6'
 import FlashOnIcon from '@mui/icons-material/FlashOn'
 import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+import handleTick from './Nodes'
 
 
 const NodeItem = ({ item }) => {
 
     const [isToggled, setIsToggled] = useState(false);
+    const [isTicked, setIsTicked] = useState(true);
 
     return (
             <div className="flex flex-wrap items-center justify-center shadow-inner hover:shadow-md hover:scale-100 rounded-md bg-blue-100 m-4 p-4 py-8">
@@ -21,11 +23,13 @@ const NodeItem = ({ item }) => {
                 </Link>
                 <div className="flex justify-end mb-8">
                     <Switch checked={isToggled}
-                        onChange={() =>
+                        disabled={!isTicked}
+                        onChange ={() =>
                             setIsToggled(!isToggled)
                         }
                         inputProps={{ 'aria-label': 'controlled' }}
                     />
+
                 </div>
                 <Grid container xs={12} spacing={3} className="flex items-center justify-center">
                     <Grid item xs={4} className="flex items-center justify-center">

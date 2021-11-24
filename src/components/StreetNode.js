@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Grid, Typography, Slider, Switch } from '@mui/material'
+import { Typography, Slider, Switch } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import CircularBar from './CircularBar'
-import Brightness6Icon from '@mui/icons-material/Brightness6'
 import FlashOnIcon from '@mui/icons-material/FlashOn'
 import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat'
 import Chart from 'react-google-charts'
 import axios from 'axios'
+
 
 const useStyles = makeStyles({
     root: {
@@ -43,127 +42,177 @@ const StreetNode = () => {
             label: '100%',
         },
     ];
-    useEffect(()=> {
-        axios.get('http://192.168.43.62:8000/apis/toggle/',{params: {id:" Street_Light-05",status:(isToggled ? "on" : "off")}})
-    },[isToggled])
+    useEffect(() => {
+        axios.get('http://192.168.43.62:8000/apis/toggle/', { params: { id: " Street_Light-05", status: (isToggled ? "on" : "off") } })
+    }, [isToggled])
 
-    useEffect(()=> {
-        axios.get('http://192.168.43.62:8000/apis/dimming/',{params: {id:" Street_Light-05",value:value}})
-    },[value])
+    useEffect(() => {
+        axios.get('http://192.168.43.62:8000/apis/dimming/', { params: { id: " Street_Light-05", value: value } })
+    }, [value])
 
     return (
-        <div className="md:container md:mx-auto mt-8">
-            <Grid item container xs={12} direction="row" justifyContent="center" alignItems="center">
 
-                <Grid item lg={6} xs={12} spacing={3} container direction="column" justifyContent="center" alignItems="center">
+        <div className="lg:container md:mx-auto mt-8 z-0">
 
-                    <Grid item xs={12} spacing={3} container direction="row" justifyContent="center" alignItems="center">
+            <div className="flex grid grid-flow-col grid-cols-6 gap-4 items-center m-8 mx-10 p-4 bg-gray-200 rounded-md  ">
+                <div className="flex col-span-5 items-center justify-start text-2xl text-primary font-bold ">Street light 1</div>
+                <div className="flex col-span-1 items-center justify-end">
+                    <Typography className="text-lg sm:text-sm text-primary font-bold">On/Off&nbsp; &nbsp; </Typography>
+                    <Switch checked={isToggled} color="success"
+                        onChange={() =>
 
-                        <Grid item xs className="node-name flex items-center justify-start text-2xl text-primary font-bold">
-                            Street Light 1
-                        </Grid>
+                            setIsToggled(!isToggled)
+                        }
+                        inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                </div>
+            </div>
+            <div className="flex z-99 grid grid-flow-col grid-cols-12 gap-4 items-center m-8 mx-10 ">
+                <div className="flex col-span-6 items-center bg-blue-200 bg-opacity-25 rounded-md p-6">
+                    <span>
+                        <div className="text-gray-500 font-bold">Light Intensity &nbsp; &nbsp;</div>
+                    </span>
+                    <Slider size="large" className="mx-16"
+                        step={null}
+                        defaultValue={25}
+                        aria-label="Default"
+                        valueLabelDisplay="auto"
+                        marks={marks}
+                        min={25}
+                        max={100}
+                        value={value}
+                        onChange={handleChange}>
+                    </Slider>
 
-                        <Grid item xs className="on-off-btn flex items-center justify-end pr-8">
-                            <Typography className="text-lg sm:text-sm text-primary font-bold">On/Off&nbsp; &nbsp; </Typography>
-                            <Switch checked={isToggled}
-                                onChange={() => 
-                                    setIsToggled(!isToggled)
-                                }
-                                inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                        </Grid>
+                </div>
 
-                    </Grid>
+                <div className="flex items-center justify-center col-span-3 bg-blue-200 bg-opacity-25 rounded-md py-9 ">
+                    <span>
+                        <div className="text-gray-500 font-bold">Current flowing &nbsp;</div>
+                    </span>
+                    <FlashOnIcon className="text-yellow-500" /><Typography className="text-gray-600"> &nbsp;150 mA</Typography>
+                </div>
+                <div className="flex items-center justify-center col-span-3 bg-blue-200 bg-opacity-25 rounded-md py-9">
+                    <span>
+                        <div className="text-gray-500 font-bold">Temperature &nbsp;</div>
+                    </span>
+                    <DeviceThermostatIcon className="text-red-500" /><Typography className="text-gray-600"> &nbsp;55 &deg; C</Typography>
+                </div>
 
-                    <Grid item xs={12} className="flex items-center justify-center p-4">
-                        <div className={classes.root}>
-                            <Grid container spacing={3} direction="row" justifyContent="center">
+            </div>
 
-                                <Grid item xs={12} className="p-8" >
+            <div className="flex grid grid-flow-col grid-cols-6 gap-4 items-center justify-center mx-20 -mt-12">
+                <div className="flex grid items-center justify-center col-span-2 mx-20 ">
+                    
+                    <Chart
+                        width={'600px'}
+                        height={'400px'}
+                        chartType="LineChart"
+                        loader={<div>Loading Chart</div>}
+                        data={[
+                            ['x', 'light intensity'],
+                            [0, 0],
+                            [1, 10],
+                            [2, 23],
+                            [3, 17],
+                            [4, 18],
+                            [5, 9],
+                            [6, 11],
+                            [7, 27],
+                            [8, 33],
+                            [9, 40],
+                            [10, 32],
+                            [11, 35],
+                        ]}
+                        options={{
+                            hAxis: {
+                                title: 'Time',
+                            },
+                            vAxis: {
+                                title: 'Light Intensity',
+                            },
+                        }}
+                        rootProps={{ 'data-testid': '1' }}
+                    />
+                    <div className="flex text-gray-500 font-bold items-center justify-center -mt-20">Light Intensity</div>
 
-                                    <Grid item xs={12} className="flex items-center justify-center">
-                                        <CircularBar className="stroke transition duration-300 ease-in"
-                                            value={value}
-                                            stroke={'#3B82F6'}
-                                            max={100}
-                                            text="Light Intensity"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} className="flex items-center justify-center pt-4">
-                                        <Slider
-                                            step={null}
-                                            defaultValue={25}
-                                            marks={marks}
-                                            min={25}
-                                            max={100}
-                                            value={value}
-                                            onChange={handleChange}>
-                                        </Slider>
-                                    </Grid>
+                </div>
+                <div className="flex grid items-center justify-center col-span-2 mx-20 ">
+                    
+                    <Chart 
+                        width={'600px'}
+                        height={'400px'}
+                        chartType="LineChart"
+                        loader={<div>Loading Chart</div>}
+                        data={[
+                            ['x', 'light intensity'],
+                            [0, 0],
+                            [1, 10],
+                            [2, 23],
+                            [3, 17],
+                            [4, 18],
+                            [5, 9],
+                            [6, 11],
+                            [7, 27],
+                            [8, 33],
+                            [9, 40],
+                            [10, 32],
+                            [11, 35],
+                        ]}
+                        options={{
+                            hAxis: {
+                                title: 'Time',
+                            },
+                            vAxis: {
+                                title: 'Light Intensity',
+                            },
+                        }}
+                        rootProps={{ 'data-testid': '1' }}
+                    />
+                    <div className="flex text-gray-500 font-bold items-center justify-center -mt-20">Current Flowing</div>
+                </div>
+                <div className="flex grid items-center justify-center col-span-2 mx-20 ">
+                   
+                    <Chart
+                        width={'600px'}
+                        height={'400px'}
+                        chartType="LineChart"
+                        loader={<div>Loading Chart</div>}
+                        data={[
+                            ['x', 'light intensity'],
+                            [0, 0],
+                            [1, 10],
+                            [2, 23],
+                            [3, 17],
+                            [4, 18],
+                            [5, 9],
+                            [6, 11],
+                            [7, 27],
+                            [8, 33],
+                            [9, 40],
+                            [10, 32],
+                            [11, 35],
+                        ]}
+                        options={{
+                            hAxis: {
+                                title: 'Time',
+                            },
+                            vAxis: {
+                                title: 'Light Intensity',
+                            },
+                        }}
+                        rootProps={{ 'data-testid': '1' }}
+                    />
+                     <div className="flex text-gray-500 font-bold items-center justify-center -mt-20">Temperature</div>
 
-                                </Grid>
+                </div>
 
-                            </Grid>
-
-                        </div>
-                    </Grid>
-                    <Grid container xs={12} spacing={3} className="flex items-center justify-center">
-                        <Grid item xs={4} className="flex items-center justify-center">
-                            <Brightness6Icon className="text-blue-500" /><Typography className="text-gray-600">{value} %</Typography>
-                        </Grid>
-                        <Grid item xs={4} className="flex items-center justify-center">
-                            <FlashOnIcon className="text-yellow-500" /><Typography className="text-gray-600">150 mA</Typography>
-                        </Grid>
-                        <Grid item xs={4} className="flex items-center justify-center">
-                            <DeviceThermostatIcon className="text-red-500" /><Typography className="text-gray-600">55 &deg; C</Typography>
-                        </Grid>
-                    </Grid>
-
-                </Grid>
-                <Grid className="flex items-center justify-start ml-4 p-4" item lg={6} xs={12} spacing={3} container direction="column" justifyContent="center" alignItems="center">
-
-                    <Grid item xs={12} className="flex items-center justify-start">
-                        <Chart width={'600px'} height={'400px'} chartType="Line" loader={<div>Loading Chart</div>}
-                            data={[
-                                [
-                                    'Value',
-                                    'Light Intensity',
-                                    'Temperature',
-                                    'Current Drawn',
-                                ],
-                                [1, 37.8, 80.8, 41.8],
-                                [2, 30.9, 69.5, 32.4],
-                                [3, 25.4, 57, 25.7],
-                                [4, 11.7, 18.8, 10.5],
-                                [5, 11.9, 17.6, 10.4],
-                                [6, 8.8, 13.6, 7.7],
-                                [7, 7.6, 12.3, 9.6],
-                                [8, 12.3, 29.2, 10.6],
-                                [9, 16.9, 42.9, 14.8],
-                                [10, 12.8, 30.9, 11.6],
-                                [11, 5.3, 7.9, 4.7],
-                                [12, 6.6, 8.4, 5.2],
-                                [13, 4.8, 6.3, 3.6],
-                                [14, 4.2, 6.2, 3.4],
-                            ]}
-                            options={{
-                                chart: {
-                                    title: 'Linear Graph',
-                                    subtitle: 'Street light intensity, temperature & current drawn VS time',
-                                },
-                            }}
-                            rootProps={{ 'data-testid': '3' }}
-                        />
-
-                    </Grid>
-
-                </Grid>
-
-            </Grid>
-
+            </div>
 
 
         </div>
+
+
     )
 }
 
