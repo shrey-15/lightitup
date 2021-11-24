@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 
 const StreetNode = () => {
     const [isToggled, setIsToggled] = useState(false);
-    const [value, setValue] = useState(10);
+    const [value, setValue] = useState(25);
     const handleChange = (event, newValue) => {
         if (newValue !== value) {
             setValue(newValue)
@@ -26,13 +26,6 @@ const StreetNode = () => {
     const classes = useStyles();
 
     const marks = [
-        {
-            value: 0,
-            label: '0%',
-        },
-        {
-            value: 10,
-        },
         {
             value: 25,
             label: '25%',
@@ -51,11 +44,11 @@ const StreetNode = () => {
         },
     ];
     useEffect(()=> {
-        axios.get('toggle/',{id:"streetlight1",status:(!isToggled)})
+        axios.get('http://192.168.43.62:8000/apis/toggle/',{params: {id:" Street_Light-05",status:(isToggled ? "on" : "off")}})
     },[isToggled])
 
     useEffect(()=> {
-        axios.get('dimming/',{id:"streetlight1",value:value})
+        axios.get('http://192.168.43.62:8000/apis/dimming/',{params: {id:" Street_Light-05",value:value}})
     },[value])
 
     return (
@@ -99,9 +92,9 @@ const StreetNode = () => {
                                     <Grid item xs={12} className="flex items-center justify-center pt-4">
                                         <Slider
                                             step={null}
-                                            defaultValue={10}
+                                            defaultValue={25}
                                             marks={marks}
-                                            min={0}
+                                            min={25}
                                             max={100}
                                             value={value}
                                             onChange={handleChange}>

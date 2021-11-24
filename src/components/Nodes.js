@@ -7,20 +7,20 @@ import { Link } from 'react-router-dom'
 
 const Nodes = () => {
 
-    // useEffect(()=> {
-    //     fetchItems()
-    // },[])
+    useEffect(()=> {
+        fetchItems()
+    },[])
 
-    // const [items, setItems]=useState([])    
+    const [items, setItems]=useState([])    
 
-    // const fetchItems = async () => {
+    const fetchItems = async () => {
 
-    //     const result = await axios(`https://www.breakingbadapi.com/api/characters`);
+        const result = await axios(`http://192.168.1.104`);
 
-    //     console.log(items.items) 
-    //     setItems(result.data)
+        console.log(items.items) 
+        setItems(result.data)
 
-    // }
+    }
     const [flag, setFlag] = useState(true)
     const [value, setValue] = useState(10);
     const handleChange = (event, newValue) => {
