@@ -101,12 +101,12 @@ const StreetNode = () => {
 
             </div>
 
-            <div className="flex grid grid-flow-col grid-cols-6 gap-4 items-center justify-center mx-20 -mt-12">
+            <div className="flex grid grid-flow-col grid-cols-6 gap-4 items-center justify-center mx-20 ">
                 <div className="flex grid items-center justify-center col-span-2 mx-20 ">
                     
                     <Chart
                         width={'600px'}
-                        height={'400px'}
+                        height={'300px'}
                         chartType="LineChart"
                         loader={<div>Loading Chart</div>}
                         data={[
@@ -131,21 +131,22 @@ const StreetNode = () => {
                             vAxis: {
                                 title: 'Light Intensity',
                             },
+                            
                         }}
                         rootProps={{ 'data-testid': '1' }}
                     />
-                    <div className="flex text-gray-500 font-bold items-center justify-center -mt-20">Light Intensity</div>
+                    <div className="flex text-gray-500 font-bold items-center justify-center">Light Intensity</div>
 
                 </div>
                 <div className="flex grid items-center justify-center col-span-2 mx-20 ">
                     
                     <Chart 
                         width={'600px'}
-                        height={'400px'}
+                        height={'300px'}
                         chartType="LineChart"
                         loader={<div>Loading Chart</div>}
                         data={[
-                            ['x', 'light intensity'],
+                            ['x', 'current'],
                             [0, 0],
                             [1, 10],
                             [2, 23],
@@ -164,22 +165,23 @@ const StreetNode = () => {
                                 title: 'Time',
                             },
                             vAxis: {
-                                title: 'Light Intensity',
+                                title: 'Current',
                             },
+                            colors: ['#F59E0B'],
                         }}
                         rootProps={{ 'data-testid': '1' }}
                     />
-                    <div className="flex text-gray-500 font-bold items-center justify-center -mt-20">Current Flowing</div>
+                    <div className="flex text-gray-500 font-bold items-center justify-center ">Current Flowing</div>
                 </div>
                 <div className="flex grid items-center justify-center col-span-2 mx-20 ">
                    
                     <Chart
                         width={'600px'}
-                        height={'400px'}
+                        height={'300px'}
                         chartType="LineChart"
                         loader={<div>Loading Chart</div>}
                         data={[
-                            ['x', 'light intensity'],
+                            ['x', 'temperature'],
                             [0, 0],
                             [1, 10],
                             [2, 23],
@@ -198,12 +200,13 @@ const StreetNode = () => {
                                 title: 'Time',
                             },
                             vAxis: {
-                                title: 'Light Intensity',
+                                title: 'Temperature',
                             },
+                            colors: ['#EF4444'],
                         }}
                         rootProps={{ 'data-testid': '1' }}
                     />
-                     <div className="flex text-gray-500 font-bold items-center justify-center -mt-20">Temperature</div>
+                     <div className="flex text-gray-500 font-bold items-center justify-center ">Temperature</div>
 
                 </div>
 

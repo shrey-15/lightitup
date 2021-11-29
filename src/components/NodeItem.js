@@ -6,10 +6,10 @@ import Brightness6Icon from '@mui/icons-material/Brightness6'
 import FlashOnIcon from '@mui/icons-material/FlashOn'
 import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat'
 import { Link } from 'react-router-dom'
-import handleTick from './Nodes'
 
 
-const NodeItem = ({ item }) => {
+
+const NodeItem = ({ item, ticked }) => {
 
     const [isToggled, setIsToggled] = useState(false);
     const [isTicked, setIsTicked] = useState(true);
@@ -23,7 +23,7 @@ const NodeItem = ({ item }) => {
                 </Link>
                 <div className="flex justify-end mb-8">
                     <Switch checked={isToggled}
-                        disabled={!isTicked}
+                        disabled={ticked}
                         onChange ={() =>
                             setIsToggled(!isToggled)
                         }

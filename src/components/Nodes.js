@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom'
 import Checkbox from '@mui/material/Checkbox';
 import CircularProgress from '@mui/material/CircularProgress';
 import { green } from '@mui/material/colors';
+import AddCircle from '@mui/icons-material/AddCircle'
+
 
 const Nodes = () => {
 
@@ -62,6 +64,7 @@ const Nodes = () => {
         setTicked(!ticked);
     };
 
+
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const timer = useRef();
@@ -83,12 +86,17 @@ const Nodes = () => {
     };
     const buttonSx = {
         ...(success && {
-          bgcolor: green[700],
-          '&:hover': {
-            bgcolor: green[900],
-          },
+            bgcolor: green[700],
+            '&:hover': {
+                bgcolor: green[900],
+            },
         }),
-      };
+    };
+
+    const handleIncr = (event, prevValue) => {
+        setValue(prevValue+25)
+    };
+
 
 
     return (
@@ -116,7 +124,7 @@ const Nodes = () => {
                     >
                         Discover
                         {loading && (
-                            <CircularProgress color="success" 
+                            <CircularProgress color="success"
                                 size={24}
                                 sx={{
                                     position: 'absolute',
@@ -124,20 +132,23 @@ const Nodes = () => {
                                     left: '50%',
                                     marginTop: '-12px',
                                     marginLeft: '-12px',
-                                  }}
+                                }}
                             />
                         )}
                     </Button>
                 </div>
 
             </div>
-            <div className="flex grid grid-flow-col grid-cols-2 gap-4 items-center m-8 mx-10 p-6 bg-blue-200 bg-opacity-25 rounded-md">
+            <div className="flex grid grid-flow-col grid-cols-2 gap-4 items-center m-8 mx-10 p-4 bg-blue-200 bg-opacity-25 rounded-md">
 
-                <div className="flex grid items-center">
+                <div className="flex items-center">
                     <span>
                         <Typography className="text-gray-500">Light Intensity &nbsp; &nbsp;</Typography>
                     </span>
-                    <Slider className="ml-2"
+                    <span>
+                        {/* <AddCircle onClick={handleIncr} /> */}
+                    </span>
+                    <Slider className="ml-2" disabled={!ticked}
                         step={null}
                         defaultValue={25}
                         marks={marks}
@@ -151,7 +162,7 @@ const Nodes = () => {
 
 
                 <div className="flex items-centers justify-end ">
-                    <Button onClick={handleClick} color={flag ? "error" : "success"} variant={flag ? "outlined" : "contained"}>All On/Off</Button>
+                    <Button disabled={!ticked} onClick={handleClick} color={flag ? "error" : "success"} variant={flag ? "outlined" : "contained"}>All On/Off</Button>
                 </div>
 
                 {/* <div className="flex items-center justify-end">
@@ -166,7 +177,7 @@ const Nodes = () => {
             </div>
             <ul className="flex items-center justify-center grid grid-flow-row grid-cols-3 grid-rows-3 gap-4 p-6">
                 {list.map(item => (
-                    <li key={item.id}><NodeItem item={item} /></li>
+                    <li key={item.id}><NodeItem item={item} ticked={ticked} /></li>
                 ))}
 
             </ul>
