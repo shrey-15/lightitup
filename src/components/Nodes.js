@@ -78,10 +78,11 @@ const Nodes = () => {
         if (!loading) {
             setSuccess(false);
             setLoading(true);
-            timer.current = window.setTimeout(() => {
+            axios.get('localhost:8000/discover/')
+            .then(()=>{
                 setSuccess(true);
-                setLoading(false);
-            }, 2000);
+                setLoading(false);               
+            })
         }
     };
     const buttonSx = {
@@ -93,10 +94,15 @@ const Nodes = () => {
         }),
     };
 
-    const handleIncr = (event, prevValue) => {
-        setValue(prevValue+25)
-    };
 
+   
+    useEffect(() => {
+        axios.get('http://192.168.43.62:8000/apis/toggle/', { params: { isGlobal:true, status: (flag ? "on" : "off") } })
+    }, [flag])
+
+    useEffect(() => {
+        axios.get('http://192.168.43.62:8000/apis/dimming/', { params: { isGlobal:true, value: value } })
+    }, [value])
 
 
     return (
@@ -155,7 +161,8 @@ const Nodes = () => {
                         min={25}
                         max={100}
                         value={value}
-                        onChange={handleChange}>
+                        onChange={handleChange}
+                        >
                     </Slider>
 
                 </div>

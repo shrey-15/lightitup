@@ -105,7 +105,7 @@ const StreetNode = () => {
                 <div className="flex grid items-center justify-center col-span-2 mx-20 ">
                     
                     <Chart
-                        width={'600px'}
+                        width={'550px'}
                         height={'300px'}
                         chartType="LineChart"
                         loader={<div>Loading Chart</div>}
@@ -131,7 +131,7 @@ const StreetNode = () => {
                             vAxis: {
                                 title: 'Light Intensity',
                             },
-                            
+                            legend: {position: 'none'}
                         }}
                         rootProps={{ 'data-testid': '1' }}
                     />
@@ -141,7 +141,7 @@ const StreetNode = () => {
                 <div className="flex grid items-center justify-center col-span-2 mx-20 ">
                     
                     <Chart 
-                        width={'600px'}
+                        width={'550px'}
                         height={'300px'}
                         chartType="LineChart"
                         loader={<div>Loading Chart</div>}
@@ -168,6 +168,7 @@ const StreetNode = () => {
                                 title: 'Current',
                             },
                             colors: ['#F59E0B'],
+                            legend: {position: 'none'}
                         }}
                         rootProps={{ 'data-testid': '1' }}
                     />
@@ -176,7 +177,7 @@ const StreetNode = () => {
                 <div className="flex grid items-center justify-center col-span-2 mx-20 ">
                    
                     <Chart
-                        width={'600px'}
+                        width={'550px'}
                         height={'300px'}
                         chartType="LineChart"
                         loader={<div>Loading Chart</div>}
@@ -203,6 +204,8 @@ const StreetNode = () => {
                                 title: 'Temperature',
                             },
                             colors: ['#EF4444'],
+
+                            legend: {position: 'none'}
                         }}
                         rootProps={{ 'data-testid': '1' }}
                     />

@@ -4,7 +4,11 @@ export const list =
 [
     {   
         id:1,
-        name:"Street Light 1"
+        name:"Street Light 1",
+        lint: 75,
+        current: 25,
+        temp:37
+
     },
     {   
         id:2,
