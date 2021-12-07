@@ -1,89 +1,88 @@
-import React, { Component } from "react";
-import CanvasJSReact from './canvasjs.stock.react';
-var CanvasJS = CanvasJSReact.CanvasJS;
-var CanvasJSStockChart = CanvasJSReact.CanvasJSStockChart;
- 
-class LiveChart extends Component {
-  constructor(props) {
-    super(props);
-    this.generateDataPoints = this.generateDataPoints.bind(this);
-  }
-  generateDataPoints(noOfDps) {
-    var xVal = 1, yVal = 100;
-    var dps = [];
-    for(var i = 0; i < noOfDps; i++) {
-      yVal = yVal +  Math.round(5 + Math.random() *(-5-5));
-      dps.push({x: xVal,y: yVal});  
-      xVal++;
-    }
-    return dps;
-  }
-  
-  render() {
+import { Line, Chart } from "react-chartjs-2";
+import React, {useState, useEffect} from "react";
+import zoomPlugin from "chartjs-plugin-zoom";
+
+Chart.register(zoomPlugin); // REGISTER PLUGIN
+
+const LiveChart = () => {
+    const [chartData, setChartData] = useState({});
+    const chart = () => {
+
+        setChartData({
+            labels: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
+            datasets: [
+                {
+                    label: "Light Intensity",
+                    data: [12, 34, 45, 10, 20, 24, 56, 30, 19, 45, 32, 23, 45, 12],
+                    backgroundColor: 'blue',
+                    borderColor: 'blue'
+                },
+            ],
+        });
+    };
+    useEffect(() => {
+        chart();
+    }, []);
+
     const options = {
-      title:{
-        text:"React StockChart with Numeric Axis"
-      },
-      animationEnabled: true,
-      exportEnabled: true,
-      charts: [{
-        axisX: {
-          crosshair: {
-            enabled: true,
-            snapToDataPoint: true
-          }
+        maintainAspectRatio: false,
+        responsive: true,
+        elements: {
+            point: {
+                radius: 0
+            },
+            line: {
+                borderWidth: 1.5
+            }
         },
-        axisY: {
-          crosshair: {
-            enabled: true,
-            //snapToDataPoint: true
-          }
+        scales: {
+            x: {
+                min: 0,
+                max: 60,
+                type: "logarithmic",
+                ticks: {
+                    color: "rgba(0, 0, 0, 1)"
+                },
+                
+                ticks: {
+                    color: "rgba( 0, 0, 1)"
+                },
+               
+            },
+            y: {
+                
+                ticks: {
+                    color: "rgba( 0, 0, 1)"
+                },
+            }
         },
-        data: [{
-          type: "spline",
-          dataPoints: this.generateDataPoints(10000)
-        }]
-      }],    
-      rangeSelector: {
-        inputFields: {
-          startValue: 4000,
-          endValue: 6000,
-          valueFormatString: "###0"
-        },
-        
-        buttons: [{
-          label: "1000",
-          range: 1000,
-          rangeType: "number"
-        },{
-          label: "2000",
-          range: 2000,
-          rangeType: "number"
-        },{
-          label: "5000",
-          range: 5000,
-          rangeType: "number"
-        },{
-          label: "All",        
-          rangeType: "all"
-        }]
-      }
+        plugins: {
+            zoom: {
+                pan: {
+                    enabled: true,
+                    mode:'x',
+                    threshold: 10,
+                    overScaleMode: 'x',
+                },
+            },
+            limits: {
+                x: {min: 0, max: 100},
+                x2: {min: -5, max: 5}
+            },
+        }
     };
-    const containerProps = {
-      width: "100%",
-      height: "450px",
-      margin: "auto"
-    };
+
     return (
-      <div> 
         <div>
-         <CanvasJSStockChart containerProps={containerProps} options = {options}
-              /* onRef = {ref => this.chart = ref} */
-          />
+            <Line
+                type="line"
+                data={chartData}
+                options={options}
+                width={900}
+                height={450}
+            />
         </div>
-      </div>
     );
-  }
-}
- 
-export default LiveChart;     
+};
+
+export default LiveChart;

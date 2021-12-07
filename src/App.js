@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import StreetNode from './components/StreetNode';
 import Nodes from './components/Nodes';
-import { LiveChart } from './components/LiveChart';
+import LiveChart from './components/LiveChart';
 
 
 function App() {
