@@ -22,12 +22,12 @@ const NodeItem = ({ item, ticked }) => {
       </Link>
       <div className="flex justify-end mb-8">
         <Switch
-          checked={isToggled}
+          checked={item.relay}
           disabled={ticked}
           onChange={() => {
             axios
               .get(url + "toggle/", {
-                params: { id: item.id, status: item.relay ? "on" : "off" },
+                params: { id: item.id, status: item.relay ? "off" : "on" },
               })
               .then((res) => {
                 setIO(item.id, "relay", !item.relay);
@@ -45,14 +45,12 @@ const NodeItem = ({ item, ticked }) => {
       >
         <Grid item xs={4} className="flex items-center justify-center">
           <Brightness6Icon className="text-blue-500" />
-          <Typography className="text-gray-600">
-            &nbsp; {item.dimming} %
-          </Typography>
+          <Typography className="text-gray-600">&nbsp; {item.dim} %</Typography>
         </Grid>
         <Grid item xs={4} className="flex items-center justify-center">
           <FlashOnIcon className="text-yellow-500" />
           <Typography className="text-gray-600">
-            &nbsp; {item.curr} mA
+            &nbsp; {item.current} mA
           </Typography>
         </Grid>
         <Grid item xs={4} className="flex items-center justify-center">

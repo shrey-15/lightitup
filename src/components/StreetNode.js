@@ -19,7 +19,7 @@ const StreetNode = () => {
   const { id } = useParams();
   const { nodes, setIO } = useNodeContext();
 
-  const item = nodes.find((node) => node.nodeID === id);
+  const item = nodes.find((node) => node.id === id);
   const classes = useStyles();
 
   const marks = [

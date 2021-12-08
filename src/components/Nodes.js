@@ -11,7 +11,7 @@ import { useNodeContext } from "../NodeContext";
 
 const Nodes = () => {
   const { nodes, setNodes, setGlobalToggle, setGlobalDim } = useNodeContext();
-  const [flag, setFlag] = useState(true);
+  const [flag, setFlag] = useState(false);
   const [value, setValue] = useState(25);
   const [ticked, setTicked] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -47,12 +47,22 @@ const Nodes = () => {
 
   const handleChange = (event, newValue) => {
     if (newValue !== value) {
-      setValue(newValue);
+      axios
+        .get(url + "dimming/", {
+          params: { isGlobal: true, value: newValue },
+        })
+        .then((res) => {
+          setValue(newValue);
+          setGlobalDim(newValue);
+          console.log(nodes);
+        });
     }
   };
   useEffect(() => {
     axios.get(url + "getNodes/").then((res) => {
       setNodes(res.data.nodes);
+      console.log(res.data.nodes);
+      console.log(nodes);
     });
   }, []);
 
@@ -79,24 +89,13 @@ const Nodes = () => {
   useEffect(() => {
     axios
       .get(url + "toggle/", {
-        params: { isGlobal: true, status: flag ? "off" : "on" },
+        params: { isGlobal: true, status: flag ? "on" : "off" },
       })
       .then((res) => {
         setGlobalToggle(flag);
         console.log(nodes);
       });
   }, [flag]);
-
-  useEffect(() => {
-    axios
-      .get(url + "dimming/", {
-        params: { isGlobal: true, value: value },
-      })
-      .then((res) => {
-        setGlobalDim(value);
-        console.log(nodes);
-      });
-  }, [value]);
 
   return (
     <div className="lg:container md:mx-auto mt-8 z-0">
@@ -165,8 +164,8 @@ const Nodes = () => {
           <Button
             disabled={!ticked}
             onClick={handleClick}
-            color={flag ? "error" : "success"}
-            variant={flag ? "outlined" : "contained"}
+            color={flag ? "success" : "error"}
+            variant={flag ? "contained" : "outlined"}
           >
             All On/Off
           </Button>

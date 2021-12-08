@@ -19,11 +19,14 @@ const node_reducer = (state, action) => {
     return { ...state, cart: tempCart };
   }
   if (action.type === SET_IO) {
-    let allNodes = state.nodes;
-    if (total > 0) {
+    let allNodes = [...state.nodes];
+    console.log(allNodes);
+    console.log(action.payload.nodeID);
+    if (state.total > 0) {
       let obj = allNodes.find((node) => {
-        return node.nodeID === action.payload.nodeID;
+        return node.id === action.payload.nodeID;
       });
+
       obj[action.payload.IOLine] = action.payload.value;
     }
     return { ...state, nodes: allNodes, total: allNodes.length };
