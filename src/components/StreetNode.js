@@ -7,6 +7,7 @@ import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
 import Chart from "react-google-charts";
 import axios from "axios";
 import url from "./BaseURL";
+import { useNodeContext } from "../NodeContext";
 
 const useStyles = makeStyles({
   root: {
@@ -16,14 +17,9 @@ const useStyles = makeStyles({
 
 const StreetNode = () => {
   const { id } = useParams();
-  const [isToggled, setIsToggled] = useState(false);
-  const [value, setValue] = useState(25);
-  const handleChange = (event, newValue) => {
-    if (newValue !== value) {
-      setValue(newValue);
-      // console.log(newValue)
-    }
-  };
+  const { nodes, setIO } = useNodeContext();
+
+  const item = nodes.find((node) => node.nodeID === id);
   const classes = useStyles();
 
   const marks = [
@@ -44,17 +40,6 @@ const StreetNode = () => {
       label: "100%",
     },
   ];
-  useEffect(() => {
-    axios.get(url + "toggle/", {
-      params: { id: id, status: isToggled ? "on" : "off" },
-    });
-  }, [isToggled]);
-
-  useEffect(() => {
-    axios.get(url + "dimming/", {
-      params: { id: id, value: value },
-    });
-  }, [value]);
 
   return (
     <div className="lg:container md:mx-auto mt-8 z-0">
@@ -67,9 +52,18 @@ const StreetNode = () => {
             On/Off&nbsp; &nbsp;{" "}
           </Typography>
           <Switch
-            checked={isToggled}
+            checked={item.relay}
             color="success"
-            onChange={() => setIsToggled(!isToggled)}
+            onChange={() => {
+              axios
+                .get(url + "toggle/", {
+                  params: { id: id, status: !item.relay ? "on" : "off" },
+                })
+                .then((res) => {
+                  setIO(item.id, "relay", !item.relay);
+                  console.log(item);
+                });
+            }}
             inputProps={{ "aria-label": "controlled" }}
           />
         </div>
@@ -85,14 +79,24 @@ const StreetNode = () => {
             size="large"
             className="mx-16"
             step={null}
-            defaultValue={25}
+            defaultValue={item.dimming}
             aria-label="Default"
             valueLabelDisplay="auto"
             marks={marks}
             min={25}
             max={100}
-            value={value}
-            onChange={handleChange}
+            value={item.dimming}
+            onChange={(event, newValue) => {
+              if (newValue !== item.dimming) {
+                axios
+                  .get(url + "dimming/", {
+                    params: { id: id, value: newValue },
+                  })
+                  .then((res) => {
+                    setIO(id, "dimming", newValue);
+                  });
+              }
+            }}
           ></Slider>
         </div>
 

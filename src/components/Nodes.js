@@ -1,17 +1,16 @@
 import { React, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Typography, Slider, Button } from "@mui/material";
-import { list } from "./ListOfNodes";
 import NodeItem from "./NodeItem";
 import { Link } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
 import CircularProgress from "@mui/material/CircularProgress";
 import { green } from "@mui/material/colors";
-import AddCircle from "@mui/icons-material/AddCircle";
 import url from "./BaseURL";
+import { useNodeContext } from "../NodeContext";
 
 const Nodes = () => {
-  const [items, setItems] = useState([]);
+  const { nodes, setNodes, setGlobalToggle, setGlobalDim } = useNodeContext();
   const [flag, setFlag] = useState(true);
   const [value, setValue] = useState(25);
   const [ticked, setTicked] = useState(true);
@@ -53,7 +52,7 @@ const Nodes = () => {
   };
   useEffect(() => {
     axios.get(url + "getNodes/").then((res) => {
-      setItems(res.data.nodes);
+      setNodes(res.data.nodes);
     });
   }, []);
 
@@ -72,21 +71,31 @@ const Nodes = () => {
       axios.get(url + "discover/").then((res) => {
         setSuccess(true);
         setLoading(false);
-        setItems(res.data.nodes);
+        setNodes(res.data.nodes);
       });
     }
   };
 
   useEffect(() => {
-    axios.get(url + "toggle/", {
-      params: { isGlobal: true, status: flag ? "off" : "on" },
-    });
+    axios
+      .get(url + "toggle/", {
+        params: { isGlobal: true, status: flag ? "off" : "on" },
+      })
+      .then((res) => {
+        setGlobalToggle(flag);
+        console.log(nodes);
+      });
   }, [flag]);
 
   useEffect(() => {
-    axios.get(url + "dimming/", {
-      params: { isGlobal: true, value: value },
-    });
+    axios
+      .get(url + "dimming/", {
+        params: { isGlobal: true, value: value },
+      })
+      .then((res) => {
+        setGlobalDim(value);
+        console.log(nodes);
+      });
   }, [value]);
 
   return (
@@ -174,7 +183,7 @@ const Nodes = () => {
                 </div> */}
       </div>
       <ul className="flex items-center justify-center grid grid-flow-row grid-cols-3 grid-rows-3 gap-4 p-6">
-        {items.map((item) => (
+        {nodes.map((item) => (
           <li key={item.id}>
             <NodeItem item={item} ticked={ticked} />
           </li>
