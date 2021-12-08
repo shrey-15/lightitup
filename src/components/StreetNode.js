@@ -143,13 +143,30 @@ const StreetNode = () => {
             options={{
               hAxis: {
                 title: "Time",
+                maxValue: 15,
+                minValue: 0,
+                viewWindow:{
+                  max:10
+                }
               },
               vAxis: {
                 title: "Light Intensity",
               },
+              colors: ["#3366CC"],
+
               legend: { position: "none" },
+              explorer: { axis: 'horizontal' },
+              aggregationTarget: 'auto',
+              animation: {
+                startup: true,
+                duration: 1000,
+                easing: 'linear'
+              }
+
             }}
-            rootProps={{ "data-testid": "1" }}
+            rootProps={{ "data-testid": "1" 
+            
+          }}
           />
           <div className="flex text-gray-500 font-bold items-center justify-center">
             Light Intensity
@@ -179,12 +196,26 @@ const StreetNode = () => {
             options={{
               hAxis: {
                 title: "Time",
+                maxValue: 15,
+                minValue: 0,
+                viewWindow:{
+                  max:10
+                }
               },
               vAxis: {
                 title: "Current",
               },
               colors: ["#F59E0B"],
+
               legend: { position: "none" },
+              explorer: { axis: 'horizontal' },
+              aggregationTarget: 'auto',
+              animation: {
+                startup: true,
+                duration: 1000,
+                easing: 'linear'
+              }
+
             }}
             rootProps={{ "data-testid": "1" }}
           />
@@ -212,10 +243,23 @@ const StreetNode = () => {
               [9, 40],
               [10, 32],
               [11, 35],
+              [12, 25],
+              [13, 15],
+              [14, 33],
+              [15, 26],
+              [16, 30],
+              [17, 2],
+              [18, 44],
+              [19, 21],
             ]}
             options={{
               hAxis: {
                 title: "Time",
+                maxValue: 15,
+                minValue: 0,
+                viewWindow:{
+                  max:10
+                }
               },
               vAxis: {
                 title: "Temperature",
@@ -223,6 +267,14 @@ const StreetNode = () => {
               colors: ["#EF4444"],
 
               legend: { position: "none" },
+              explorer: { axis: 'horizontal' },
+              aggregationTarget: 'auto',
+              animation: {
+                startup: true,
+                duration: 1000,
+                easing: 'linear'
+              }
+
             }}
             rootProps={{ "data-testid": "1" }}
           />
