@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import StreetNode from './components/StreetNode';
 import Nodes from './components/Nodes';
-import LiveChart from './components/LiveChart';
+import { Scheduler } from './components/Scheduler';
 
 
 function App() {
@@ -13,8 +13,7 @@ function App() {
       <Switch>
         <Route path="/" exact component={StreetNode} />
         <Route path="/nodes" component={Nodes} />
-        <Route path="/graphs" component={LiveChart} />
-
+        <Route path="/scheduler" component={Scheduler}></Route>
       </Switch>
     </Router>
   );
