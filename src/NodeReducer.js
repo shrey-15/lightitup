@@ -4,6 +4,8 @@ import {
   SET_IO,
   SET_GLOBAL_TOGGLE,
   SET_GLOBAL_DIM,
+  SET_GLOBAL,
+  SET_GLOBAL_TICK,
 } from "./Actions";
 
 const node_reducer = (state, action) => {
@@ -15,13 +17,24 @@ const node_reducer = (state, action) => {
     };
   }
   if (action.type === SET_INST_VALUE) {
-    const tempCart = state.cart.filter((item) => item.id !== action.payload);
-    return { ...state, cart: tempCart };
+    let allNodes = [...state.nodes];
+
+    let obj = allNodes.find((node) => {
+      return node.id === action.payload.id;
+    });
+    obj.current = action.payload.current;
+    obj.temp = action.payload.temp;
+    return { ...state, nodes: allNodes, total: allNodes.length };
+  }
+
+  if (action.type === SET_GLOBAL_TICK) {
+    return {
+      ...state,
+      global: { ...state.global, isGlobal: action.payload.status },
+    };
   }
   if (action.type === SET_IO) {
     let allNodes = [...state.nodes];
-    console.log(allNodes);
-    console.log(action.payload.nodeID);
     if (state.total > 0) {
       let obj = allNodes.find((node) => {
         return node.id === action.payload.nodeID;
@@ -36,7 +49,12 @@ const node_reducer = (state, action) => {
     allNodes.map((node) => {
       node.relay = action.payload.value;
     });
-    return { ...state, nodes: allNodes, total: allNodes.length };
+    return {
+      ...state,
+      nodes: allNodes,
+      total: allNodes.length,
+      global: { ...state.global, globalStatus: action.payload.value },
+    };
   }
   if (action.type === SET_GLOBAL_DIM) {
     let allNodes = state.nodes;
@@ -44,6 +62,18 @@ const node_reducer = (state, action) => {
       node.dim = action.payload.value;
     });
     return { ...state, nodes: allNodes, total: allNodes.length };
+  }
+  if (action.type === SET_GLOBAL) {
+    if (action.payload.feature === "toggle")
+      return {
+        ...state,
+        global: { ...state.global, isGlobal: action.payload.value },
+      };
+    if (action.payload.feature === "dim")
+      return {
+        ...state,
+        global: { ...state.global, globalValue: action.payload.value },
+      };
   }
 };
 

@@ -17,10 +17,27 @@ const useStyles = makeStyles({
 
 const StreetNode = () => {
   const { id } = useParams();
-  const { nodes, setIO } = useNodeContext();
+  const { nodes, global, setIO, setInstValues } = useNodeContext();
 
   const item = nodes.find((node) => node.id === id);
   const classes = useStyles();
+
+  const [graphData, setGraphData] = useState({ curr: [], temp: [] });
+
+  useEffect(() => {
+    const insterval = setInterval(() => {
+      axios
+        .get(url + "graphValues/", {
+          params: { id: id },
+        })
+        .then((res) => {
+          setGraphData(res.data);
+          setInstValues(id, res.data.curr[10][1], res.data.temp[10][1]);
+          console.log(res.data);
+        });
+    }, 7000);
+    return () => clearInterval(insterval);
+  }, []);
 
   const marks = [
     {
@@ -53,6 +70,7 @@ const StreetNode = () => {
           </Typography>
           <Switch
             checked={item.relay}
+            disabled={global.isGlobal}
             color="success"
             onChange={() => {
               axios
@@ -79,15 +97,16 @@ const StreetNode = () => {
             size="large"
             className="mx-16"
             step={null}
-            defaultValue={item.dimming}
+            disabled={global.isGlobal}
+            defaultValue={item.dim}
             aria-label="Default"
             valueLabelDisplay="auto"
             marks={marks}
             min={25}
             max={100}
-            value={item.dimming}
+            value={item.dim}
             onChange={(event, newValue) => {
-              if (newValue !== item.dimming) {
+              if (newValue !== item.dim) {
                 axios
                   .get(url + "dimming/", {
                     params: { id: id, value: newValue },
@@ -114,7 +133,10 @@ const StreetNode = () => {
             <div className="text-gray-500 font-bold">Temperature &nbsp;</div>
           </span>
           <DeviceThermostatIcon className="text-red-500" />
-          <Typography className="text-gray-600"> &nbsp;55 &deg; C</Typography>
+          <Typography className="text-gray-600">
+            {" "}
+            &nbsp;{item.temp} &deg; C
+          </Typography>
         </div>
       </div>
 
@@ -145,9 +167,9 @@ const StreetNode = () => {
                 title: "Time",
                 maxValue: 15,
                 minValue: 0,
-                viewWindow:{
-                  max:10
-                }
+                viewWindow: {
+                  max: 10,
+                },
               },
               vAxis: {
                 title: "Light Intensity",
@@ -155,18 +177,15 @@ const StreetNode = () => {
               colors: ["#3366CC"],
 
               legend: { position: "none" },
-              explorer: { axis: 'horizontal' },
-              aggregationTarget: 'auto',
+              explorer: { axis: "horizontal" },
+              aggregationTarget: "auto",
               animation: {
                 startup: true,
                 duration: 1000,
-                easing: 'linear'
-              }
-
+                easing: "linear",
+              },
             }}
-            rootProps={{ "data-testid": "1" 
-            
-          }}
+            rootProps={{ "data-testid": "1" }}
           />
           <div className="flex text-gray-500 font-bold items-center justify-center">
             Light Intensity
@@ -178,29 +197,15 @@ const StreetNode = () => {
             height={"300px"}
             chartType="LineChart"
             loader={<div>Loading Chart</div>}
-            data={[
-              ["x", "current"],
-              [0, 0],
-              [1, 10],
-              [2, 23],
-              [3, 17],
-              [4, 18],
-              [5, 9],
-              [6, 11],
-              [7, 27],
-              [8, 33],
-              [9, 40],
-              [10, 32],
-              [11, 35],
-            ]}
+            data={graphData.curr}
             options={{
               hAxis: {
                 title: "Time",
                 maxValue: 15,
                 minValue: 0,
-                viewWindow:{
-                  max:10
-                }
+                viewWindow: {
+                  max: 10,
+                },
               },
               vAxis: {
                 title: "Current",
@@ -208,14 +213,13 @@ const StreetNode = () => {
               colors: ["#F59E0B"],
 
               legend: { position: "none" },
-              explorer: { axis: 'horizontal' },
-              aggregationTarget: 'auto',
+              explorer: { axis: "horizontal" },
+              aggregationTarget: "auto",
               animation: {
                 startup: true,
                 duration: 1000,
-                easing: 'linear'
-              }
-
+                easing: "linear",
+              },
             }}
             rootProps={{ "data-testid": "1" }}
           />
@@ -229,37 +233,15 @@ const StreetNode = () => {
             height={"300px"}
             chartType="LineChart"
             loader={<div>Loading Chart</div>}
-            data={[
-              ["x", "temperature"],
-              [0, 0],
-              [1, 10],
-              [2, 23],
-              [3, 17],
-              [4, 18],
-              [5, 9],
-              [6, 11],
-              [7, 27],
-              [8, 33],
-              [9, 40],
-              [10, 32],
-              [11, 35],
-              [12, 25],
-              [13, 15],
-              [14, 33],
-              [15, 26],
-              [16, 30],
-              [17, 2],
-              [18, 44],
-              [19, 21],
-            ]}
+            data={graphData.temp}
             options={{
               hAxis: {
                 title: "Time",
                 maxValue: 15,
                 minValue: 0,
-                viewWindow:{
-                  max:10
-                }
+                viewWindow: {
+                  max: 10,
+                },
               },
               vAxis: {
                 title: "Temperature",
@@ -267,14 +249,13 @@ const StreetNode = () => {
               colors: ["#EF4444"],
 
               legend: { position: "none" },
-              explorer: { axis: 'horizontal' },
-              aggregationTarget: 'auto',
+              explorer: { axis: "horizontal" },
+              aggregationTarget: "auto",
               animation: {
                 startup: true,
                 duration: 1000,
-                easing: 'linear'
-              }
-
+                easing: "linear",
+              },
             }}
             rootProps={{ "data-testid": "1" }}
           />

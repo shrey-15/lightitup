@@ -10,12 +10,16 @@ import url from "./BaseURL";
 import { useNodeContext } from "../NodeContext";
 
 const Nodes = () => {
-  const { nodes, setNodes, setGlobalToggle, setGlobalDim } = useNodeContext();
-  const [flag, setFlag] = useState(false);
-  const [value, setValue] = useState(25);
-  const [ticked, setTicked] = useState(true);
+  const {
+    nodes,
+    global,
+    setNodes,
+    setGlobalToggle,
+    setGlobalDim,
+    setInstValues,
+    setGlobalTick,
+  } = useNodeContext();
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   const marks = [
     {
@@ -37,7 +41,7 @@ const Nodes = () => {
   ];
 
   const buttonSx = {
-    ...(success && {
+    ...(loading && {
       bgcolor: green[700],
       "&:hover": {
         bgcolor: green[900],
@@ -46,13 +50,12 @@ const Nodes = () => {
   };
 
   const handleChange = (event, newValue) => {
-    if (newValue !== value) {
+    if (newValue !== global.globalValue) {
       axios
         .get(url + "dimming/", {
           params: { isGlobal: true, value: newValue },
         })
         .then((res) => {
-          setValue(newValue);
           setGlobalDim(newValue);
           console.log(nodes);
         });
@@ -64,38 +67,48 @@ const Nodes = () => {
       console.log(res.data.nodes);
       console.log(nodes);
     });
+
+    // const insterval = setInterval(() => {
+    //   axios.get(url + "instValues/").then((res) => {
+    //     setInstValues(res.data.values);
+    //   });
+    // }, 5000);
+    // return () => clearInterval(insterval);
   }, []);
 
-  const handleClick = () => {
-    setFlag(!flag);
-  };
-
-  const handleTick = (event) => {
-    setTicked(!ticked);
-  };
+  useEffect(() => {
+    if (global.isGlobal === true) {
+      axios
+        .get(url + "toggle/", {
+          params: {
+            isGlobal: true,
+            status: global.globalStatus ? "on" : "off",
+          },
+        })
+        .then((res) => {
+          setGlobalToggle(global.globalStatus);
+          console.log(nodes);
+        });
+      axios
+        .get(url + "dimming/", {
+          params: { isGlobal: true, value: global.globalValue },
+        })
+        .then((res) => {
+          setGlobalDim(global.globalValue);
+          console.log(nodes);
+        });
+    }
+  }, [global.isGlobal]);
 
   const handleButtonClick = () => {
     if (!loading) {
-      setSuccess(false);
       setLoading(true);
       axios.get(url + "discover/").then((res) => {
-        setSuccess(true);
         setLoading(false);
         setNodes(res.data.nodes);
       });
     }
   };
-
-  useEffect(() => {
-    axios
-      .get(url + "toggle/", {
-        params: { isGlobal: true, status: flag ? "on" : "off" },
-      })
-      .then((res) => {
-        setGlobalToggle(flag);
-        console.log(nodes);
-      });
-  }, [flag]);
 
   return (
     <div className="lg:container md:mx-auto mt-8 z-0">
@@ -105,8 +118,10 @@ const Nodes = () => {
         </div>
         <div className="flex items-center col-span-1 justify-end">
           <Checkbox
-            checked={ticked}
-            onChange={handleTick}
+            checked={global.isGlobal}
+            onChange={() => {
+              setGlobalTick(!global.isGlobal);
+            }}
             inputProps={{ "aria-label": "controlled" }}
           />
           <span>
@@ -149,23 +164,35 @@ const Nodes = () => {
           <span>{/* <AddCircle onClick={handleIncr} /> */}</span>
           <Slider
             className="ml-2"
-            disabled={!ticked}
+            disabled={!global.isGlobal}
             step={null}
-            defaultValue={25}
+            defaultValue={global.globalValue}
             marks={marks}
             min={25}
             max={100}
-            value={value}
+            value={global.globalValue}
             onChange={handleChange}
           ></Slider>
         </div>
 
         <div className="flex items-centers justify-end ">
           <Button
-            disabled={!ticked}
-            onClick={handleClick}
-            color={flag ? "success" : "error"}
-            variant={flag ? "contained" : "outlined"}
+            disabled={!global.isGlobal}
+            onClick={() => {
+              axios
+                .get(url + "toggle/", {
+                  params: {
+                    isGlobal: true,
+                    status: global.globalStatus ? "off" : "on",
+                  },
+                })
+                .then((res) => {
+                  setGlobalToggle(!global.globalStatus);
+                  console.log(nodes);
+                });
+            }}
+            color={global.globalStatus ? "success" : "error"}
+            variant={global.globalStatus ? "contained" : "outlined"}
           >
             All On/Off
           </Button>
@@ -184,7 +211,7 @@ const Nodes = () => {
       <ul className="flex items-center justify-center grid grid-flow-row grid-cols-3 grid-rows-3 gap-4 p-6">
         {nodes.map((item) => (
           <li key={item.id}>
-            <NodeItem item={item} ticked={ticked} />
+            <NodeItem item={item} />
           </li>
         ))}
       </ul>

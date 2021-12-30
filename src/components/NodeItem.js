@@ -10,8 +10,8 @@ import axios from "axios";
 import url from "./BaseURL";
 import { useNodeContext } from "../NodeContext";
 
-const NodeItem = ({ item, ticked }) => {
-  const { setIO } = useNodeContext();
+const NodeItem = ({ item }) => {
+  const { global, setIO } = useNodeContext();
 
   return (
     <div className="flex flex-wrap items-center justify-center shadow-inner hover:shadow-md hover:scale-100 rounded-md bg-blue-100 m-4 p-4 py-8">
@@ -23,7 +23,7 @@ const NodeItem = ({ item, ticked }) => {
       <div className="flex justify-end mb-8">
         <Switch
           checked={item.relay}
-          disabled={ticked}
+          disabled={global.isGlobal}
           onChange={() => {
             axios
               .get(url + "toggle/", {
