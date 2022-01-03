@@ -9,7 +9,7 @@ import { TimeSelecter } from "./TimeSelecter";
 import { IntensitySelecter } from "./IntensitySelecter";
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import FormControl from '@mui/material/FormControl';
-import { NonPeakSelector } from "./NonPeakSelector";
+
 
 export const Scheduler = () => {
 
