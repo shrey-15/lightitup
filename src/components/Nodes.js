@@ -25,10 +25,40 @@ const Nodes = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [tab, setTab] = useState(0);
+  const [nonPeakHrs, setNonPeakHrs] = useState([]);
+  const [startTime, setStartTime] = useState(null);
+  const [intensity, setIntensity] = useState(25);
+  const [endTime, setEndTime] = useState(null);
+
+  const query = [startTime, intensity, endTime];
+  // setNonPeakHrs(nonPeakHr => [...nonPeakHrs, query])
+  console.log("q1"+query)
 
   const handleChangeTab = (event, newValue) => {
     setTab(newValue);
   };
+
+  const addQuery = event => {
+    event.preventDefault();
+    setNonPeakHrs([
+      ...query,
+      {
+        STime:TimeSelecter.startTime,
+        ETime: endTime,
+        intens: intensity
+      }
+    ]);
+    setStartTime(null)
+    setEndTime(null)
+    setIntensity(null)
+    console.log("NK"+nonPeakHrs)
+  };
+  console.log("q2"+query)
+
+  const applyChanges = (e) => {
+    addQuery(e)
+    console.log("2nk"+nonPeakHrs)
+  }
 
   const marks = [
     {
@@ -113,6 +143,8 @@ const Nodes = () => {
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
+
+
     return (
       <div
         role="tabpanel"
@@ -178,11 +210,7 @@ const Nodes = () => {
               <DarkModeIcon className="text-blue-500" /><span className="font-bold text-gray-700"> &nbsp; Sunset Time: &nbsp; </span>
               <span className="p-4 bg-gray-50 rounded-md shadow-md text-white bg-blue-500 font-bold"> 06:00 PM </span>
             </div>
-            <div className="flex col-start-2 col-span-1 items-center justify-center rounded-md">
-              <div className="flex items-center justify-center rounded-md mr-16">
-                <AddCircleIcon className="text-green-500" />
-              </div>
-            </div>
+           
             <div className="flex col-start-3 col-span-5 items-center justify-center rounded-md">
               <div className="flex items-center justify-center rounded-md mr-16">
                 <TimeSelecter />
@@ -193,11 +221,7 @@ const Nodes = () => {
                 <RemoveCircleIcon className="text-red-500" />
               </div>
             </div>
-            <div className="flex col-start-2 col-span-1 items-center justify-center rounded-md">
-              <div className="flex items-center justify-center rounded-md mr-16">
-                <AddCircleIcon className="text-green-500" />
-              </div>
-            </div>
+           
             <div className="flex col-start-3 col-span-5 items-center justify-center rounded-md">
               <div className="flex items-center justify-center rounded-md mr-16">
                 <TimeSelecter />
@@ -208,11 +232,7 @@ const Nodes = () => {
                 <RemoveCircleIcon className="text-red-500" />
               </div>
             </div>
-            <div className="flex col-start-2 col-span-1 items-center justify-center rounded-md">
-              <div className="flex items-center justify-center rounded-md mr-16">
-                <AddCircleIcon className="text-green-500" />
-              </div>
-            </div>
+           
             <div className="flex col-start-3 col-span-5 items-center justify-center rounded-md">
               <div className="flex items-center justify-center rounded-md mr-16">
                 <TimeSelecter />
@@ -223,20 +243,30 @@ const Nodes = () => {
                 <RemoveCircleIcon className="text-red-500" />
               </div>
             </div>
-            <div className="flex col-start-2 col-span-1 items-center justify-center rounded-md">
-              <div className="flex items-center justify-center rounded-md mr-16">
-                <AddCircleIcon className="text-green-500" />
-              </div>
-            </div>
-            <div className="flex col-start-3 col-span-5 items-center justify-center rounded-md">
-              <div className="flex items-center justify-center rounded-md mr-16">
-                <TimeSelecter />
-              </div>
-            </div>
-            <div className="flex col-start-8 col-span-1 items-center justify-center p-4 rounded-md">
-              <div className="flex items-center justify-center rounded-md mr-16">
-                <RemoveCircleIcon className="text-red-500" />
-              </div>
+           
+          
+            <div className="flex col-start-8 col-span-2 items-center justify-end p-4 rounded-md">
+              <Button
+                variant="contained"
+                sx={buttonSx}
+                disabled={loading}
+                onClick={applyChanges}
+              >
+                Apply Changes
+                {loading && (
+                  <CircularProgress
+                    color="success"
+                    size={24}
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      marginTop: "-12px",
+                      marginLeft: "-12px",
+                    }}
+                  />
+                )}
+              </Button>
             </div>
           </div>
         </TabPanel>

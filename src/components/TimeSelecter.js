@@ -7,19 +7,22 @@ import { IntensitySelecter } from "./IntensitySelecter";
 
 
 export const TimeSelecter = () => {
-    const [startValue, setStartValue] = useState(null);
-    const [endValue, setEndValue] = useState(null);
-
+    const [startTime, setStartTime] = useState(null);
+    const [endTime, setEndTime] = useState(null);
+    // console.log("jghhtrg "+ startTime+ " jhfueru")
     return (
         <div className="flex grid grid-flow-col gap-1">
             <div className="flex items-center justify-start p-4 rounded-md ">
                 <LocalizationProvider className=""
                     dateAdapter={AdapterDateFns}>
                     <TimePicker
+                        disableMaskedInput="true"
+                        readOnly="true"
                         label="Start Time"
-                        value={startValue}
+                        value={startTime}
                         onChange={(newValue) => {
-                            setStartValue(newValue);
+                            setStartTime(newValue);
+                            // console.log("timepeacker "+ startTime+ " same are")
                         }}
                         renderInput={(params) => <TextField {...params} />}
                     />
@@ -30,9 +33,10 @@ export const TimeSelecter = () => {
                     dateAdapter={AdapterDateFns}>
                     <TimePicker
                         label="End Time"
-                        value={endValue}
+                        disableMaskedInput="true"
+                        value={endTime}
                         onChange={(newValue) => {
-                            setEndValue(newValue);
+                            setEndTime(newValue);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                     />
