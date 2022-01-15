@@ -1,6 +1,6 @@
 import { React, useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { Typography, Slider, Button, Tabs, Tab, Box } from "@mui/material";
+import { Typography, Slider, Button, Tabs, Tab, Box, Autocomplete } from "@mui/material";
 import NodeItem from "./NodeItem";
 import { Link } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
@@ -32,7 +32,7 @@ const Nodes = () => {
 
   const query = [startTime, intensity, endTime];
   // setNonPeakHrs(nonPeakHr => [...nonPeakHrs, query])
-  console.log("q1"+query)
+  console.log("q1" + query)
 
   const handleChangeTab = (event, newValue) => {
     setTab(newValue);
@@ -43,7 +43,7 @@ const Nodes = () => {
     setNonPeakHrs([
       ...query,
       {
-        STime:TimeSelecter.startTime,
+        STime: TimeSelecter.startTime,
         ETime: endTime,
         intens: intensity
       }
@@ -51,13 +51,13 @@ const Nodes = () => {
     setStartTime(null)
     setEndTime(null)
     setIntensity(null)
-    console.log("NK"+nonPeakHrs)
+    console.log("NK" + nonPeakHrs)
   };
-  console.log("q2"+query)
+  console.log("q2" + query)
 
   const applyChanges = (e) => {
     addQuery(e)
-    console.log("2nk"+nonPeakHrs)
+    console.log("2nk" + nonPeakHrs)
   }
 
   const marks = [
@@ -210,65 +210,37 @@ const Nodes = () => {
               <DarkModeIcon className="text-blue-500" /><span className="font-bold text-gray-700"> &nbsp; Sunset Time: &nbsp; </span>
               <span className="p-4 bg-gray-50 rounded-md shadow-md text-white bg-blue-500 font-bold"> 06:00 PM </span>
             </div>
-           
+
             <div className="flex col-start-3 col-span-5 items-center justify-center rounded-md">
               <div className="flex items-center justify-center rounded-md mr-16">
                 <TimeSelecter />
               </div>
-            </div>
-            <div className="flex col-start-8 col-span-1 items-center justify-center p-4 rounded-md">
-              <div className="flex items-center justify-center rounded-md mr-16">
-                <RemoveCircleIcon className="text-red-500" />
-              </div>
-            </div>
-           
-            <div className="flex col-start-3 col-span-5 items-center justify-center rounded-md">
-              <div className="flex items-center justify-center rounded-md mr-16">
-                <TimeSelecter />
-              </div>
-            </div>
-            <div className="flex col-start-8 col-span-1 items-center justify-center p-4 rounded-md">
-              <div className="flex items-center justify-center rounded-md mr-16">
-                <RemoveCircleIcon className="text-red-500" />
-              </div>
-            </div>
-           
-            <div className="flex col-start-3 col-span-5 items-center justify-center rounded-md">
-              <div className="flex items-center justify-center rounded-md mr-16">
-                <TimeSelecter />
-              </div>
-            </div>
-            <div className="flex col-start-8 col-span-1 items-center justify-center p-4 rounded-md">
-              <div className="flex items-center justify-center rounded-md mr-16">
-                <RemoveCircleIcon className="text-red-500" />
-              </div>
-            </div>
-           
-          
-            <div className="flex col-start-8 col-span-2 items-center justify-end p-4 rounded-md">
-              <Button
-                variant="contained"
-                sx={buttonSx}
-                disabled={loading}
-                onClick={applyChanges}
-              >
-                Apply Changes
-                {loading && (
-                  <CircularProgress
-                    color="success"
-                    size={24}
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      marginTop: "-12px",
-                      marginLeft: "-12px",
-                    }}
-                  />
-                )}
-              </Button>
             </div>
           </div>
+          <div className="flex grid grid-flow-row grid-cols-9  grid-rows-1 p-4 bg-blue-200 bg-opacity-25 rounded-md">
+            <Button className="col-start-8 col-span-2"
+              variant="contained"
+              sx={buttonSx}
+              disabled={loading}
+              onClick={applyChanges}
+            >
+              Apply Changes
+              {loading && (
+                <CircularProgress
+                  color="success"
+                  size={24}
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    marginTop: "-12px",
+                    marginLeft: "-12px",
+                  }}
+                />
+              )}
+            </Button>
+          </div>
+
         </TabPanel>
         <TabPanel value={tab} index={1}>
           <div className="flex grid grid-flow-col grid-cols-12 gap-4 items-center mx-10 p-4 bg-blue-200 bg-opacity-25 rounded-md">

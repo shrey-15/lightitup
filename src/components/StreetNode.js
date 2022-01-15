@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Typography, Slider, Switch } from "@mui/material";
+import { Typography, Slider, Switch, Alert } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
 import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
 import Chart from "react-google-charts";
 import axios from "axios";
 import url from "./BaseURL";
+import { Link } from 'react-router-dom'
 import { useNodeContext } from "../NodeContext";
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const useStyles = makeStyles({
   root: {
@@ -43,7 +45,9 @@ const StreetNode = () => {
 
   return (
     <div className="lg:container md:mx-auto mt-8 z-0">
+     
       <div className="flex grid grid-flow-col grid-cols-6 gap-4 items-center m-8 mx-10 p-4 bg-gray-200 rounded-md  ">
+      <Link to="/nodes"><ArrowBackIosNewIcon /></Link> 
         <div className="flex col-span-5 items-center justify-start text-2xl text-primary font-bold ">
           {id}
         </div>
@@ -52,18 +56,18 @@ const StreetNode = () => {
             On/Off&nbsp; &nbsp;{" "}
           </Typography>
           <Switch
-            checked={item.relay}
+            // checked={item.relay}
             color="success"
-            onChange={() => {
-              axios
-                .get(url + "toggle/", {
-                  params: { id: id, status: !item.relay ? "on" : "off" },
-                })
-                .then((res) => {
-                  setIO(item.id, "relay", !item.relay);
-                  console.log(item);
-                });
-            }}
+            // onChange={() => {
+            //   axios
+            //     .get(url + "toggle/", {
+            //       params: { id: id, status: !item.relay ? "on" : "off" },
+            //     })
+            //     .then((res) => {
+            //       setIO(item.id, "relay", !item.relay);
+            //       console.log(item);
+            //     });
+            // }}
             inputProps={{ "aria-label": "controlled" }}
           />
         </div>
@@ -79,13 +83,18 @@ const StreetNode = () => {
             size="large"
             className="mx-16"
             step={null}
-            defaultValue={item.dimming}
+            // defaultValue={item.dimming}
             aria-label="Default"
             valueLabelDisplay="auto"
             marks={marks}
             min={25}
             max={100}
-            value={item.dimming}
+            sx={{
+              '& .MuiSlider-mark': {
+                height: '8px',
+              },
+            }}
+            // value={item.dimming}
             onChange={(event, newValue) => {
               if (newValue !== item.dimming) {
                 axios
@@ -171,6 +180,7 @@ const StreetNode = () => {
           <div className="flex text-gray-500 font-bold items-center justify-center">
             Light Intensity
           </div>
+          <Alert severity="warning">Intensity Exceeding- Check it out!</Alert>
         </div>
         <div className="flex grid items-center justify-center col-span-2 mx-20 ">
           <Chart
@@ -222,6 +232,7 @@ const StreetNode = () => {
           <div className="flex text-gray-500 font-bold items-center justify-center ">
             Current Flowing
           </div>
+          <Alert severity="warning">Current Flow Exceeding- Check it out!</Alert>
         </div>
         <div className="flex grid items-center justify-center col-span-2 mx-20 ">
           <Chart
@@ -281,6 +292,7 @@ const StreetNode = () => {
           <div className="flex text-gray-500 font-bold items-center justify-center ">
             Temperature
           </div>
+          <Alert severity="warning">Temperature Exceeding- Check it out!</Alert>
         </div>
       </div>
     </div>

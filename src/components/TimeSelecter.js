@@ -16,8 +16,8 @@ export const TimeSelecter = () => {
                 <LocalizationProvider className=""
                     dateAdapter={AdapterDateFns}>
                     <TimePicker
-                        disableMaskedInput="true"
-                        readOnly="true"
+
+
                         label="Start Time"
                         value={startTime}
                         onChange={(newValue) => {
@@ -25,6 +25,7 @@ export const TimeSelecter = () => {
                             // console.log("timepeacker "+ startTime+ " same are")
                         }}
                         renderInput={(params) => <TextField {...params} />}
+                        InputProps={{ readOnly: true }}
                     />
                 </LocalizationProvider>
             </div>
@@ -36,7 +37,11 @@ export const TimeSelecter = () => {
                         disableMaskedInput="true"
                         value={endTime}
                         onChange={(newValue) => {
-                            setEndTime(newValue);
+                            const hours = newValue.getHours().toString().padStart(2, "0");
+                            const minutes = newValue.getMinutes().toString().padStart(2, "0")
+                            const endValue = hours + ':' + minutes;
+                            console.log(endValue)
+                            setEndTime(endValue);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                     />
