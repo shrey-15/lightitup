@@ -149,8 +149,8 @@ const Nodes = () => {
       <div
         role="tabpanel"
         hidden={value !== index}
-        id={`vertical-tabpanel-${index}`}
-        aria-labelledby={`vertical-tab-${index}`}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
         {...other}
       >
         {value === index && (
@@ -170,8 +170,8 @@ const Nodes = () => {
 
   function a11yProps(index) {
     return {
-      id: `vertical-tab-${index}`,
-      'aria-controls': `vertical-tabpanel-${index}`,
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
     };
   }
 
@@ -182,19 +182,13 @@ const Nodes = () => {
           Area Name
         </div>
       </div>
-      <Box className="m-2 mx-2 p-6"
-        sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}
-      >
-        <Tabs
-          orientation="vertical"
-          value={tab}
-          onChange={handleChangeTab}
-          aria-label="Vertical tabs example"
-          sx={{ borderRight: 1, borderColor: 'divider' }}
-        >
-          <Tab className="font-bold" label="AUTO" {...a11yProps(0)} />
-          <Tab label="MANUAL" {...a11yProps(1)} />
-        </Tabs>
+      <Box className="p-6 m-4">
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={tab} onChange={handleChangeTab} aria-label="basic tabs example">
+            <Tab label="AUTO" {...a11yProps(0)} />
+            <Tab label="MANUAL" {...a11yProps(1)} />
+          </Tabs>
+        </Box>
         <TabPanel value={tab} index={0}>
           <div className="flex grid grid-flow-row-dense grid-cols-9 grid-rows-2 gap-4 items-center p-4 bg-blue-200 bg-opacity-25 rounded-md">
             <div className="flex col-span-3 items-center justify-center p-4 rounded-md ">
@@ -217,7 +211,28 @@ const Nodes = () => {
               </div>
             </div>
           </div>
-          <div className="flex grid grid-flow-row grid-cols-9  grid-rows-1 p-4 bg-blue-200 bg-opacity-25 rounded-md">
+          <div className="flex grid grid-flow-row grid-cols-9 gap-4 grid-rows-1 p-4 bg-blue-200 bg-opacity-25 rounded-md">
+            <Button className="col-start-6 col-span-2"
+              variant="outlined"
+              sx={buttonSx}
+              disabled={loading}
+              onClick={applyChanges}
+            >
+              Sync with Auto
+              {loading && (
+                <CircularProgress
+                  color="success"
+                  size={24}
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    marginTop: "-12px",
+                    marginLeft: "-12px",
+                  }}
+                />
+              )}
+            </Button>
             <Button className="col-start-8 col-span-2"
               variant="contained"
               sx={buttonSx}
@@ -328,8 +343,6 @@ const Nodes = () => {
           </div>
         </TabPanel>
       </Box>
-
-
     </div >
   );
 };
