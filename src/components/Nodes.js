@@ -1,7 +1,6 @@
 import { React, useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { Typography, Slider, Button, Tabs, Tab, Box, Autocomplete } from "@mui/material";
-import NodeItem from "./NodeItem";
+import { Typography, Slider, Button, Tabs, Tab, Box, Alert } from "@mui/material";
 import { Link } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -12,8 +11,6 @@ import PropTypes from 'prop-types';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { TimeSelecter } from "./TimeSelecter";
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 
@@ -343,6 +340,10 @@ const Nodes = () => {
           </div>
         </TabPanel>
       </Box>
+      <Box sx={{ width: "30%" }} >
+        <Alert className="m-8" severity="warning">Temperature Exceeding- Check it out!</Alert>
+      </Box>
+
     </div >
   );
 };

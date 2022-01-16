@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Typography, Slider, Switch, Alert } from "@mui/material";
+import { Typography, Slider, Switch } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
 import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
@@ -180,7 +180,6 @@ const StreetNode = () => {
           <div className="flex text-gray-500 font-bold items-center justify-center">
             Light Intensity
           </div>
-          <Alert severity="warning">Intensity Exceeding- Check it out!</Alert>
         </div>
         <div className="flex grid items-center justify-center col-span-2 mx-20 ">
           <Chart
@@ -232,7 +231,6 @@ const StreetNode = () => {
           <div className="flex text-gray-500 font-bold items-center justify-center ">
             Current Flowing
           </div>
-          <Alert severity="warning">Current Flow Exceeding- Check it out!</Alert>
         </div>
         <div className="flex grid items-center justify-center col-span-2 mx-20 ">
           <Chart
@@ -292,7 +290,6 @@ const StreetNode = () => {
           <div className="flex text-gray-500 font-bold items-center justify-center ">
             Temperature
           </div>
-          <Alert severity="warning">Temperature Exceeding- Check it out!</Alert>
         </div>
       </div>
     </div>
